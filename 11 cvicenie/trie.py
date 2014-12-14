@@ -11,10 +11,12 @@ class Trie:
 
     def __init__(self):
         self.root = self.Node()
+        self.poc = 0
 
     def pridaj1(self, vrchol, key, value):
         if key == '':
             vrchol.value = value
+            self.poc += 1
         else:
             pismeno = key[0]
             if pismeno not in vrchol.child:
@@ -22,8 +24,20 @@ class Trie:
             self.pridaj1(vrchol.child[pismeno], key[1:], value)
 
     def vloz(self, key, value):
-        self.pridaj1(self.root, key, value)
-
+##        self.pridaj1(self.root, key, value)
+        vrch = self.root
+        while True:
+            if key == '':
+                vrch.value = value
+                self.poc += 1
+                break
+            else:
+                pismeno = key[0]
+                if pismeno not in vrch.child:
+                    vrch.child[pismeno] = self.Node()
+                vrch = vrch.child[pismeno]
+                key = key[1:]
+                
     def zisti(self, key):
         return None
 
@@ -34,7 +48,7 @@ class Trie:
     #------------------------------------------------------------------
 
     def __len__(self):
-        return 1
+        return self.poc
     
     def is_empty(self):
         return len(self) == 0
